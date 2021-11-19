@@ -1,0 +1,48 @@
+<ul id="styles-list"></ul>
+
+<script>
+  function markupRow(receiverSourceData) {
+    return `<li>
+    <span>${receiverSourceData.receiver.name}</span>
+    <span> = </span>
+    <input
+      type="text"
+      placeholder="None"
+      value="${receiverSourceData.source.name}"
+      data-receiver-id="${receiverSourceData.receiver.id}"
+    >
+  </li>`;
+  }
+
+  function handleTextFieldChange(event) {
+    console.log(
+      `Receiver ID: ${event.target.dataset.receiverId} | New Source name: ${event.target.value}`
+    );
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "update-source",
+          newSourceName: event.target.value,
+          receiverId: event.target.dataset.receiverId,
+        },
+      },
+      "*"
+    );
+  }
+
+  const stylesListElement = document.getElementById("styles-list");
+  stylesListElement.addEventListener("change", handleTextFieldChange);
+
+  onmessage = ({ data: { pluginMessage } }) => {
+    const messageType = pluginMessage.type;
+
+    if (messageType === "render") {
+      const stylesNames = pluginMessage.receiverSourceData;
+      const rowHTML = pluginMessage.receiverSourceData.reduce(
+        (resultString, pair) => resultString + markupRow(pair),
+        ""
+      );
+      stylesListElement.innerHTML = rowHTML;
+    }
+  };
+</script>
