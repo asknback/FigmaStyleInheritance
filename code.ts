@@ -1,6 +1,3 @@
-// code.ts
-
-// Helpers
 
 // Look at all styles' descriptions to find a matching source style and return if found
 function getSourceForStyle(style, styles) {
@@ -20,7 +17,7 @@ function getReceiverSourcePairs(styles) {
 
 // Main plugin logic
 // figma.showUI(__html__);
-figma.showUI(__html__, { width: 480, height: 400, title: "External CSS Vars" }); 
+figma.showUI(__html__, { width: 480, height: 400, title: "Figma Style Inheritance" }); 
 
 const styles = figma.getLocalPaintStyles();
 // Call the helper function to form pairs
@@ -65,4 +62,12 @@ figma.ui.onmessage = (msg) => {
     // Show a success message in the Figma interface
     figma.notify(`New source style: ${msg.newSourceName}`);
   }
-};
+}
+
+// Set Secondary to Black
+//  Iterate all colors
+//    Is colorX using Secondary
+//      no? End yes? Set colorX to Secondary again
+//         Iterate all colors
+//           is colorY using colorX
+//             no? End. yes? continue the same
